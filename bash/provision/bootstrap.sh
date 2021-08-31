@@ -24,6 +24,9 @@ sudo yum-config-manager --enable remi-php74
 # Install all the required packages to get PHP 7.4 set up within Nginx
 sudo yum -y install php php-fpm
 
+# Install PHP extensions
+sudo yum -y install php-xml
+
 # Change user from "apache" to "nginx"
 sudo sh -c "sed -i 's/user = apache/user = nginx/g' /etc/php-fpm.d/www.conf"
 
