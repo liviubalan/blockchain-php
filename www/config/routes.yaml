@@ -1,9 +1,14 @@
 blockchain:
     path: /blockchain
     controller: App\Controller\ApiController::blockchain
-    methods: [GET]
+    methods: [ GET ]
+
+transaction:
+    path: /transaction
+    controller: App\Controller\ApiController::transaction
+    methods: [ POST ]
 
 test:
     path: /test
     controller: App\Controller\ApiController::test
-    methods: [GET]
+    methods: [ GET ]
