@@ -76,7 +76,7 @@ class ApiController extends AbstractController
         $nonce = $this->bitcoin->proofOfWork($previousBlockHash, $currentBlockData);
         $blockHash = $this->bitcoin->hashBlock($previousBlockHash, $currentBlockData, $nonce);
 
-        $nodeAddress = 'node-liviu-balan';
+        $nodeAddress = $_SERVER['HTTP_HOST'];
         $this->bitcoin->createNewTransaction(12.5, "00", $nodeAddress); // Reward for mining the block
 
         $newBlock = $this->bitcoin->createNewBlock($nonce, $previousBlockHash, $blockHash);
