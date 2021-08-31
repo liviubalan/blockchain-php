@@ -13,6 +13,11 @@ mine:
     controller: App\Controller\ApiController::mine
     methods: [ GET ]
 
+register_node:
+    path: /register-node
+    controller: App\Controller\ApiController::registerNode
+    methods: [ POST ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

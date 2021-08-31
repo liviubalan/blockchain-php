@@ -22,17 +22,22 @@ class ApiController extends AbstractController
 
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
+        $result = parent::setContainer($container);
         $this->cache = $container->get('cache.app');
 
         $cachedBitcoin = $this->cache->getItem(static::CACHE_KEY);
         if ($cachedBitcoin->isHit()) {
             $bitcoin = unserialize($cachedBitcoin->get());
         } else {
-            $bitcoin = new Blockchain();
+            $server = $this->container->get('request_stack')->getCurrentRequest()->server;
+            $scheme = $server->get('REQUEST_SCHEME', '');
+            $host = $server->get('HTTP_HOST', '');
+            $currentNodeUrl = $scheme.'://'.$host;
+            $bitcoin = new Blockchain($currentNodeUrl);
         }
         $this->bitcoin = $bitcoin;
 
-        return parent::setContainer($container);
+        return $result;
     }
 
     public function blockchain(): JsonResponse
@@ -84,6 +89,30 @@ class ApiController extends AbstractController
         return new JsonResponse([
             'note' => "New block mined successfully",
             'block' => $newBlock,
+        ]);
+    }
+
+    public function registerNode(Request $request): JsonResponse
+    {
+        $content = trim($request->getContent());
+        if (!$content) {
+            throw $this->createNotFoundException('Empty request');
+        }
+
+        $content = json_decode($content, true);
+        if (!array_key_exists('newNodeUrl', $content)) {
+            throw $this->createNotFoundException('The following fields are mandatory: newNodeUrl.');
+        }
+
+        $newNodeUrl = $content['newNodeUrl'];
+        $nodeNotAlreadyPresent = !in_array($newNodeUrl, $this->bitcoin->networkNodes);
+        $notCurrentNode = $this->bitcoin->currentNodeUrl !== $newNodeUrl;
+        if ($nodeNotAlreadyPresent && $notCurrentNode) {
+            $this->bitcoin->networkNodes[] = $newNodeUrl;
+        }
+
+        return new JsonResponse([
+            'note' => 'New node registered successfully.',
         ]);
     }
 

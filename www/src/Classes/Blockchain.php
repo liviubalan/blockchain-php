@@ -6,9 +6,12 @@ class Blockchain
 {
     public array $chain = [];
     public array $pendingTransactions = [];
+    public string $currentNodeUrl = '';
+    public array $networkNodes = [];
 
-    public function __construct()
+    public function __construct(string $currentNodeUrl)
     {
+        $this->currentNodeUrl = $currentNodeUrl;
         $this->createNewBlock(0, '0', '0'); // Genesis block
     }
 
