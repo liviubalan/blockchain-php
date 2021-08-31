@@ -14,6 +14,6 @@ class ApiController extends AbstractController {
         $bitcoin->createNewBlock(2, 'hash-1', 'hash-2');
         $bitcoin->createNewBlock(3, 'hash-2', 'hash-3');
 
-        return new JsonResponse($bitcoin);
+        return new JsonResponse($bitcoin->getLastBlock());
     }
 }

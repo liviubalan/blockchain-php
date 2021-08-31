@@ -23,4 +23,11 @@ class Blockchain
 
         return $newBlock;
     }
+
+    public function getLastBlock(): array
+    {
+        $index = count($this->chain) - 1;
+
+        return $this->chain[$index];
+    }
 }
