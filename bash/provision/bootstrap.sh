@@ -1,5 +1,10 @@
 #!/bin/bash
 
+BTC_DIR_ROOT="/vagrant/bash/provision"
+
+# Include files
+source "${BTC_DIR_ROOT}/../include/functions.sh"
+
 # Install packages
 sudo yum -y install bash-completion git
 
@@ -53,8 +58,35 @@ sudo sh -c "sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php-fpm.d/w
 # Enable and start the php-fpm service
 sudo systemctl start php-fpm
 
-# Override the default server block
-sudo cp /vagrant/bash/provision/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Create dir if it does not exist
+BTC_DIR='/etc/nginx/sites-available'
+if [ ! -d "${BTC_DIR}" ]; then
+    sudo mkdir "${BTC_DIR}"
+
+    # Check "sites-enabled/"
+    BTC_TMP_SEARCH=$(cat "${BTC_DIR_ROOT}/nginx/config/search-conf.conf")
+    BTC_TMP_REPLACE=$(cat "${BTC_DIR_ROOT}/nginx/config/replace-conf.conf")
+    BTC_TMP_FILE='/etc/nginx/nginx.conf'
+    btc_strf_replace_once "$BTC_TMP_SEARCH" "$BTC_TMP_REPLACE" "$BTC_TMP_FILE"
+
+    # Increases how much memory is reserved for examining multiple domain names
+#    sudo bash -c "echo 'server_names_hash_bucket_size 64;' >> /etc/nginx/nginx.conf"
+fi
+
+# Copy file
+sudo cp /vagrant/bash/provision/nginx/blockchain.conf "${BTC_DIR}"
+
+# Create dir if it does not exist
+BTC_DIR='/etc/nginx/sites-enabled'
+if [ ! -d "${BTC_DIR}" ]; then
+    sudo mkdir "${BTC_DIR}"
+fi
+
+# Remove file
+sudo rm -f /etc/nginx/sites-enabled/blockchain.conf
+
+# Create symbolic link
+sudo ln -s /etc/nginx/sites-available/blockchain.conf /etc/nginx/sites-enabled/blockchain.conf
 
 # Restart Nginx to apply the changes
 sudo systemctl restart nginx
