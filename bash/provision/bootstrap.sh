@@ -38,4 +38,16 @@ sudo sh -c "sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php-fp
 sudo sh -c "sed -i 's/;listen.group = nobody/listen.group = nginx/g' /etc/php-fpm.d/www.conf"
 sudo sh -c "sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php-fpm.d/www.conf"
 
+# Enable and start the php-fpm service
 sudo systemctl start php-fpm
+
+# Override the default server block
+sudo cp /vagrant/bash/provision/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Restart Nginx to apply the changes
+sudo systemctl restart nginx
+
+# Create virtual host directory content
+sudo mkdir /var/www/test
+sudo chown vagrant:vagrant /var/www/test
+cp /vagrant/bash/provision/php/index.php /var/www/test/index.php
