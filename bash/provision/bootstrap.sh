@@ -47,7 +47,8 @@ sudo cp /vagrant/bash/provision/nginx/default.conf /etc/nginx/conf.d/default.con
 # Restart Nginx to apply the changes
 sudo systemctl restart nginx
 
-# Create virtual host directory content
-sudo mkdir /var/www/test
-sudo chown vagrant:vagrant /var/www/test
-cp /vagrant/bash/provision/php/index.php /var/www/test/index.php
+# Remove dir
+sudo rm -rf /var/www/blockchain
+
+# Create symbolic link
+sudo ln -s /vagrant/www /var/www/blockchain
