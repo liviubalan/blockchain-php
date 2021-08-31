@@ -11,15 +11,28 @@ class ApiController extends AbstractController {
     {
         $bitcoin = new Blockchain();
 
-        $bitcoin->createNewBlock(1, 'hash-0', 'hash-1');
+        $previousBlockHash = 'hash-1';
+        $currentBlockData = [
+            [
+                'amount' => 10,
+                'sender' => 'sender-1',
+                'recipient' => 'recipient-1',
+            ],
+            [
+                'amount' => 30,
+                'sender' => 'sender-2',
+                'recipient' => 'recipient-2',
+            ],
+            [
+                'amount' => 200,
+                'sender' => 'sender-3',
+                'recipient' => 'recipient-3',
+            ],
+        ];
+        $nonce = 100;
 
-        $bitcoin->createNewTransaction(100, 'sender-1', 'recipient-1');
-        $bitcoin->createNewBlock(2, 'hash-1', 'hash-2'); // mine a new block
-
-        $bitcoin->createNewTransaction(50, 'sender-2', 'recipient-2');
-        $bitcoin->createNewTransaction(300, 'sender-3', 'recipient-3');
-        $bitcoin->createNewTransaction(2000, 'sender-4', 'recipient-4');
-        $bitcoin->createNewBlock(3, 'hash-2', 'hash-3'); // mine a new block
+        var_dump($bitcoin->hashBlock($previousBlockHash, $currentBlockData, $nonce));
+        die;
 
         return new JsonResponse($bitcoin);
     }

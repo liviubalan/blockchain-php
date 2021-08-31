@@ -42,4 +42,11 @@ class Blockchain
 
         return $this->getLastBlock()['index'] + 1;
     }
+
+    public function hashBlock(string $previousBlockHash, array $currentBlockData, int $nonce): string
+    {
+        $dataAsString = $previousBlockHash.(string) $nonce.json_encode($currentBlockData);
+
+        return hash('sha256', $dataAsString);
+    }
 }
