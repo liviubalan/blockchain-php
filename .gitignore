@@ -1,0 +1,21 @@
+# Vagrant
+
+# Log file
+/*.log
+
+# Machine data
+/.vagrant/
+
+# Text editor
+
+# JetBrains PhpStorm
+.idea/
+
+# Vim
+*.swp
+
+# Project specific
+
+# follow.sh
+/bash/follow/include/
+/follow.sh
