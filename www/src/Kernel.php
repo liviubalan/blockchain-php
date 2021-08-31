@@ -51,4 +51,20 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
+
+    public function getCacheDir()
+    {
+        return $this->getVarDir().'/cache/'.$this->environment;
+    }
+
+    public function getLogDir()
+    {
+        return $this->getVarDir().'/log';
+    }
+
+    public function getVarDir(): string
+    {
+        // return '/tmp/symfony';
+        return $this->getProjectDir().'/var/'.$_SERVER['HTTP_HOST'];
+    }
 }
