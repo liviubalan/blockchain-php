@@ -1,3 +1,8 @@
+blockchain:
+    path: /blockchain
+    controller: App\Controller\ApiController::blockchain
+    methods: [GET]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

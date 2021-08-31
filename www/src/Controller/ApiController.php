@@ -7,10 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ApiController extends AbstractController {
+    private Blockchain $blockchain;
+
+    public function blockchain()
+    {
+        $this->blockchain = new Blockchain();
+
+        return new JsonResponse($this->blockchain);
+    }
+
     public function test()
     {
-        var_dump($_SERVER);
-        die;
         $bitcoin = new Blockchain();
 
         return new JsonResponse($bitcoin);
