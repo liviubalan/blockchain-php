@@ -7,6 +7,11 @@ class Blockchain
     public array $chain = [];
     public array $pendingTransactions = [];
 
+    public function __construct()
+    {
+        $this->createNewBlock(0, '0', '0'); // Genesis block
+    }
+
     public function createNewBlock(int $nonce, string $previousBlockHash, string $hash): array
     {
         $newBlock = [
