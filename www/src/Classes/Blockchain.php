@@ -49,4 +49,16 @@ class Blockchain
 
         return hash('sha256', $dataAsString);
     }
+
+    public function proofOfWork(string $previousBlockHash, array $currentBlockData): int
+    {
+        $nonce = 0;
+        $hash = $this->hashBlock($previousBlockHash, $currentBlockData, $nonce);
+        while (substr($hash, 0, 4) !== '0000') {
+            $nonce++;
+            $hash = $this->hashBlock($previousBlockHash, $currentBlockData, $nonce);
+        }
+
+        return $nonce;
+    }
 }
