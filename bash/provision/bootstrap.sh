@@ -27,8 +27,14 @@ sudo yum -y install php php-fpm
 # Change user from "apache" to "nginx"
 sudo sh -c "sed -i 's/user = apache/user = nginx/g' /etc/php-fpm.d/www.conf"
 
-# Change group from "apache" to "nginx"
-sudo sh -c "sed -i 's/group = apache/group = nginx/g' /etc/php-fpm.d/www.conf"
+# Create group
+sudo groupadd www-data
+
+# Change user's primary group
+sudo usermod -g www-data nginx
+
+# Change group from "apache" to "www-data"
+sudo sh -c "sed -i 's/group = apache/group = www-data/g' /etc/php-fpm.d/www.conf"
 
 # Listen on a local socket file, since this improves the overall performance of the server
 sudo sh -c "sed -i 's#listen = 127.0.0.1:9000#listen = /var/run/php-fpm/php-fpm.sock#g' /etc/php-fpm.d/www.conf"
