@@ -8,6 +8,11 @@ transaction:
     controller: App\Controller\ApiController::transaction
     methods: [ POST ]
 
+mine:
+    path: /mine
+    controller: App\Controller\ApiController::mine
+    methods: [ GET ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

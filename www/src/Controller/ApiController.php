@@ -65,6 +65,28 @@ class ApiController extends AbstractController
         return new JsonResponse("Transaction will be added in block $blockIndex.");
     }
 
+    public function mine(): JsonResponse
+    {
+        $lastBlock = $this->bitcoin->getLastBlock();
+        $previousBlockHash = $lastBlock['hash'];
+        $currentBlockData = [
+            'transactions' => $this->bitcoin->pendingTransactions,
+            'index' => $lastBlock['index'] + 1,
+        ];
+        $nonce = $this->bitcoin->proofOfWork($previousBlockHash, $currentBlockData);
+        $blockHash = $this->bitcoin->hashBlock($previousBlockHash, $currentBlockData, $nonce);
+
+        $nodeAddress = 'node-liviu-balan';
+        $this->bitcoin->createNewTransaction(12.5, "00", $nodeAddress); // Reward for mining the block
+
+        $newBlock = $this->bitcoin->createNewBlock($nonce, $previousBlockHash, $blockHash);
+
+        return new JsonResponse([
+            'note' => "New block mined successfully",
+            'block' => $newBlock,
+        ]);
+    }
+
     public function test()
     {
         return new JsonResponse('Test endpoint');
