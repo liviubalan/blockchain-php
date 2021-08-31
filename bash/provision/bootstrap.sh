@@ -1,13 +1,16 @@
 #!/bin/bash
 
-# Install Git
-sudo yum -y install git
+# Install packages
+sudo yum -y install bash-completion git
 
 # Add the CentOS 7 EPEL repository
 sudo yum -y install epel-release
 
 # Install Nginx
 sudo yum -y install nginx
+
+# Change the access permissions
+sudo chmod 755 /var/log/nginx/
 
 # Start the Nginx service
 sudo systemctl start nginx
