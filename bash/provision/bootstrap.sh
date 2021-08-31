@@ -2,7 +2,7 @@
 
 BTC_DIR_ROOT="/vagrant/bash/provision"
 
-# Include files
+# Include file
 source "${BTC_DIR_ROOT}/../include/functions.sh"
 
 # Install packages
@@ -36,7 +36,7 @@ sudo yum -y install php php-fpm
 sudo yum -y install php-xml
 
 # Change user from "apache" to "nginx"
-sudo sh -c "sed -i 's/user = apache/user = nginx/g' /etc/php-fpm.d/www.conf"
+btc_strf_replace_once 'user = apache' 'user = nginx' '/etc/php-fpm.d/www.conf'
 
 # Create group
 sudo groupadd www-data
@@ -45,15 +45,15 @@ sudo groupadd www-data
 sudo usermod -g www-data nginx
 
 # Change group from "apache" to "www-data"
-sudo sh -c "sed -i 's/group = apache/group = www-data/g' /etc/php-fpm.d/www.conf"
+btc_strf_replace_once 'group = apache' 'group = www-data' '/etc/php-fpm.d/www.conf'
 
 # Listen on a local socket file, since this improves the overall performance of the server
-sudo sh -c "sed -i 's#listen = 127.0.0.1:9000#listen = /var/run/php-fpm/php-fpm.sock#g' /etc/php-fpm.d/www.conf"
+btc_strf_replace_once 'listen = 127.0.0.1:9000' 'listen = /var/run/php-fpm/php-fpm.sock' '/etc/php-fpm.d/www.conf'
 
 # Change the owner and group settings for the socket file
-sudo sh -c "sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php-fpm.d/www.conf"
-sudo sh -c "sed -i 's/;listen.group = nobody/listen.group = nginx/g' /etc/php-fpm.d/www.conf"
-sudo sh -c "sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php-fpm.d/www.conf"
+btc_strf_replace_once ';listen.owner = nobody' 'listen.owner = nginx' '/etc/php-fpm.d/www.conf'
+btc_strf_replace_once ';listen.group = nobody' 'listen.group = nginx' '/etc/php-fpm.d/www.conf'
+btc_strf_replace ';listen.mode = 0660' 'listen.mode = 0660' '/etc/php-fpm.d/www.conf'
 
 # Enable and start the php-fpm service
 sudo systemctl start php-fpm
@@ -67,10 +67,7 @@ if [ ! -d "${BTC_DIR}" ]; then
     BTC_TMP_SEARCH=$(cat "${BTC_DIR_ROOT}/nginx/config/search-conf.conf")
     BTC_TMP_REPLACE=$(cat "${BTC_DIR_ROOT}/nginx/config/replace-conf.conf")
     BTC_TMP_FILE='/etc/nginx/nginx.conf'
-    btc_strf_replace_once "$BTC_TMP_SEARCH" "$BTC_TMP_REPLACE" "$BTC_TMP_FILE"
-
-    # Increases how much memory is reserved for examining multiple domain names
-#    sudo bash -c "echo 'server_names_hash_bucket_size 64;' >> /etc/nginx/nginx.conf"
+    btc_strf_replace_once "${BTC_TMP_SEARCH}" "${BTC_TMP_REPLACE}" "${BTC_TMP_FILE}"
 fi
 
 # Copy file
