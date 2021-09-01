@@ -139,20 +139,15 @@ class ApiController extends AbstractController
         );
 
         // Reward for mining the block
+        // This method is not called using HTTP in order to avoid overwriting "bitcoin" cache property
         $nodeAddress = $_SERVER['HTTP_HOST'];
-        $url = $this->bitcoin->currentNodeUrl.$this->get('router')->generate('transaction_broadcast');
-        $this->httpClient->makePost($url, [
+        $content = json_encode([
             'amount' => 12.5,
             'sender' => '00',
             'recipient' => $nodeAddress,
         ]);
-//        // The bitcoin "pendingTransactions" property were changed on previous request so we need to get the fresh value
-//        $cachedBitcoin = $this->cache->getItem(static::CACHE_KEY);
-//        if ($cachedBitcoin->isHit()) {
-//            /** @var Blockchain $bitcoin */
-//            $bitcoin = unserialize($cachedBitcoin->get());
-//            $this->bitcoin->pendingTransactions = $bitcoin->pendingTransactions;
-//        }
+        $request = new Request([], [], [], [], [], [], $content);
+        $this->transactionBroadcast($request);
 
         return new JsonResponse([
             'note' => 'New block mined & broadcast successfully.',
