@@ -105,14 +105,40 @@ class ApiController extends AbstractController
         }
 
         $newNodeUrl = $content['newNodeUrl'];
-        $nodeNotAlreadyPresent = !in_array($newNodeUrl, $this->bitcoin->networkNodes);
-        $notCurrentNode = $this->bitcoin->currentNodeUrl !== $newNodeUrl;
-        if ($nodeNotAlreadyPresent && $notCurrentNode) {
+        $nodeAlreadyPresent = in_array($newNodeUrl, $this->bitcoin->networkNodes);
+        $isCurrentNode = $this->bitcoin->currentNodeUrl === $newNodeUrl;
+        if (!$nodeAlreadyPresent && !$isCurrentNode) {
             $this->bitcoin->networkNodes[] = $newNodeUrl;
         }
 
         return new JsonResponse([
             'note' => 'New node registered successfully.',
+        ]);
+    }
+
+    public function registerNodesBulk(Request $request): JsonResponse
+    {
+        $content = trim($request->getContent());
+        if (!$content) {
+            throw $this->createNotFoundException('Empty request');
+        }
+
+        $content = json_decode($content, true);
+        if (!array_key_exists('allNetworkNodes', $content)) {
+            throw $this->createNotFoundException('The following fields are mandatory: allNetworkNodes.');
+        }
+
+        $allNetworkNodes = $content['allNetworkNodes'];
+        foreach ($allNetworkNodes as $networkNodeUrl) {
+            $nodeAlreadyPresent = in_array($networkNodeUrl, $this->bitcoin->networkNodes);
+            $currentNode = $this->bitcoin->currentNodeUrl === $networkNodeUrl;
+            if (!$nodeAlreadyPresent && !$currentNode) {
+                $this->bitcoin->networkNodes[] = $networkNodeUrl;
+            }
+        }
+
+        return new JsonResponse([
+            'note' => 'Bulk registration successful.',
         ]);
     }
 
