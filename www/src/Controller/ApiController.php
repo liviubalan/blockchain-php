@@ -61,7 +61,9 @@ class ApiController extends AbstractController
         $newTransaction = json_decode($request->getContent(), true);
         $blockIndex = $this->bitcoin->addTransactionToPendingTransactions($newTransaction);
 
-        return new JsonResponse("Transaction will be added in block $blockIndex.");
+        return new JsonResponse([
+            'note' => "Transaction will be added in block $blockIndex.",
+        ]);
     }
 
     public function transactionBroadcast(Request $request): JsonResponse
@@ -85,7 +87,9 @@ class ApiController extends AbstractController
             $newTransaction
         );
 
-        return new JsonResponse('Transaction created and broadcast successfully.');
+        return new JsonResponse([
+            'note' => 'Transaction created and broadcast successfully.',
+        ]);
     }
 
     public function receiveNewBlock(Request $request): JsonResponse
