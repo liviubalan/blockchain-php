@@ -77,7 +77,6 @@ class Blockchain
 
     public function chainIsValid(array $blockchain): bool
     {
-        $validChain = true;
         // Skip genesis block
         $blockchainCount = count($blockchain);
         for ($i = 1; $i < $blockchainCount; $i++) {
@@ -89,24 +88,22 @@ class Blockchain
             ], $currentBlock['nonce']);
 
             if (substr($blockHash, 0, 4) !== '0000') {
-                $validChain = false;
+                return false;
             }
 
             if ($currentBlock['previousBlockHash'] !== $prevBlock['hash']) {
-                $validChain = false;
+                return false;
             }
         }
 
+        // Genesis block
         $genesisBlock = $blockchain[0];
+        $correctIndex = $genesisBlock['index'] === 1;
+        $correctTransactions = $genesisBlock['transactions'] === [];
         $correctNonce = $genesisBlock['nonce'] === 0;
-        $correctPreviousBlockHash = $genesisBlock['previousBlockHash'] === '0';
         $correctHash = $genesisBlock['hash'] === '0';
-        $correctTransactions = count($genesisBlock['transactions']) === 0;
+        $correctPreviousBlockHash = $genesisBlock['previousBlockHash'] === '0';
 
-        if (!$correctNonce || !$correctPreviousBlockHash || !$correctHash || !$correctTransactions) {
-            $validChain = false;
-        }
-
-        return $validChain;
+        return $correctIndex && $correctTransactions && $correctNonce && $correctHash && $correctPreviousBlockHash;
     }
 }
