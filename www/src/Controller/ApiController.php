@@ -231,9 +231,82 @@ class ApiController extends AbstractController
         ]);
     }
 
-    public function test()
+    public function test(Request $request): JsonResponse
     {
-        return new JsonResponse('Test endpoint');
+        $server = $this->container->get('request_stack')->getCurrentRequest()->server;
+        $scheme = $server->get('REQUEST_SCHEME', '');
+        $host = $server->get('HTTP_HOST', '');
+        $currentNodeUrl = $scheme.'://'.$host;
+        $bitcoin = new Blockchain($currentNodeUrl);
+
+        $blockchain = <<<EOD
+[
+    {
+        "index": 1,
+        "timestamp": 1627486722,
+        "transactions": [],
+        "nonce": 0,
+        "hash": "0",
+        "previousBlockHash": "0"
+    },
+    {
+        "index": 2,
+        "timestamp": 1627486741,
+        "transactions": [],
+        "nonce": 18140,
+        "hash": "0000b9135b054d1131392c9eb9d03b0111d4b516824a03c35639e12858912100",
+        "previousBlockHash": "0"
+    },
+    {
+        "index": 3,
+        "timestamp": 1627486789,
+        "transactions": [
+            {
+                "amount": 12.5,
+                "sender": "00",
+                "recipient": "node1.net",
+                "transactionId": "61017a152a3b0"
+            }
+        ],
+        "nonce": 47458,
+        "hash": "00001abecee9bfcbcb3865c735bcce62dba8b7ed764df2d63877981f80c982e3",
+        "previousBlockHash": "0000b9135b054d1131392c9eb9d03b0111d4b516824a03c35639e12858912100"
+    },
+    {
+        "index": 4,
+        "timestamp": 1627486963,
+        "transactions": [
+            {
+                "amount": 12.5,
+                "sender": "00",
+                "recipient": "node1.net",
+                "transactionId": "61017a453dafa"
+            },
+            {
+                "amount": 10,
+                "sender": "sender-1",
+                "recipient": "recipient-1",
+                "transactionId": "61017a78b582b"
+            },
+            {
+                "amount": 10,
+                "sender": "sender-1",
+                "recipient": "recipient-1",
+                "transactionId": "61017adb00826"
+            }
+        ],
+        "nonce": 27799,
+        "hash": "000013359f62168986d5f27aae85d89288d289c22dac465bf6b8e626c1d5973e",
+        "previousBlockHash": "00001abecee9bfcbcb3865c735bcce62dba8b7ed764df2d63877981f80c982e3"
+    }
+]
+EOD;
+        $blockchain = json_decode($blockchain, true);
+        $result = $bitcoin->chainIsValid($blockchain);
+
+        return new JsonResponse([
+            'note' => "VALID: $result",
+        ]);
     }
 
     public function __destruct()
