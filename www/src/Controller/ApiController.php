@@ -17,10 +17,7 @@ class ApiController extends AbstractController
 
     private Blockchain $bitcoin;
 
-    /**
-     * @var AbstractAdapter
-     */
-    private $cache;
+    private AbstractAdapter $cache;
 
     private ValidatorService $validator;
 
@@ -133,14 +130,32 @@ class ApiController extends AbstractController
         ];
         $nonce = $this->bitcoin->proofOfWork($previousBlockHash, $currentBlockData);
         $blockHash = $this->bitcoin->hashBlock($previousBlockHash, $currentBlockData, $nonce);
-
-        $nodeAddress = $_SERVER['HTTP_HOST'];
-        $this->bitcoin->createNewTransaction(12.5, "00", $nodeAddress); // Reward for mining the block
-
         $newBlock = $this->bitcoin->createNewBlock($nonce, $previousBlockHash, $blockHash);
 
+        $this->httpClient->broadcast(
+            $this->bitcoin->networkNodes,
+            $this->get('router')->generate('receive_new_block'),
+            $newBlock
+        );
+
+        // Reward for mining the block
+        $nodeAddress = $_SERVER['HTTP_HOST'];
+        $url = $this->bitcoin->currentNodeUrl.$this->get('router')->generate('transaction_broadcast');
+        $this->httpClient->makePost($url, [
+            'amount' => 12.5,
+            'sender' => '00',
+            'recipient' => $nodeAddress,
+        ]);
+//        // The bitcoin "pendingTransactions" property were changed on previous request so we need to get the fresh value
+//        $cachedBitcoin = $this->cache->getItem(static::CACHE_KEY);
+//        if ($cachedBitcoin->isHit()) {
+//            /** @var Blockchain $bitcoin */
+//            $bitcoin = unserialize($cachedBitcoin->get());
+//            $this->bitcoin->pendingTransactions = $bitcoin->pendingTransactions;
+//        }
+
         return new JsonResponse([
-            'note' => "New block mined successfully",
+            'note' => 'New block mined & broadcast successfully.',
             'block' => $newBlock,
         ]);
     }

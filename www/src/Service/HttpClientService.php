@@ -6,10 +6,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class HttpClientService
 {
-    /**
-     * @var HttpClientInterface
-     */
-    private $client;
+    private HttpClientInterface $client;
 
     public function __construct(HttpClientInterface $client)
     {
