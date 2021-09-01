@@ -8,6 +8,11 @@ transaction:
     controller: App\Controller\ApiController::transaction
     methods: [ POST ]
 
+transaction_broadcast:
+    path: /transaction/broadcast
+    controller: App\Controller\ApiController::transactionBroadcast
+    methods: [ POST ]
+
 mine:
     path: /mine
     controller: App\Controller\ApiController::mine

@@ -61,14 +61,35 @@ class ApiController extends AbstractController
             'recipient',
         ]);
 
+        $newTransaction = json_decode($request->getContent(), true);
+        $blockIndex = $this->bitcoin->addTransactionToPendingTransactions($newTransaction);
+
+        return new JsonResponse("Transaction will be added in block $blockIndex.");
+    }
+
+    public function transactionBroadcast(Request $request): JsonResponse
+    {
+        $this->validator->checkMandatoryFields($request, [
+            'amount',
+            'sender',
+            'recipient',
+        ]);
+
         $content = json_decode($request->getContent(), true);
         $amount = (float) $content['amount'];
         $sender = $content['sender'];
         $recipient = $content['recipient'];
 
-        $blockIndex = $this->bitcoin->createNewTransaction($amount, $sender, $recipient);
+        $newTransaction = $this->bitcoin->createNewTransaction($amount, $sender, $recipient);
+        $this->bitcoin->addTransactionToPendingTransactions($newTransaction);
 
-        return new JsonResponse("Transaction will be added in block $blockIndex.");
+        $networkNodes = $this->bitcoin->networkNodes;
+        foreach ($networkNodes as $networkNodeUrl) {
+            $url = $networkNodeUrl.'/transaction';
+            $this->httpClient->makePost($url, $newTransaction);
+        }
+
+        return new JsonResponse('Transaction created and broadcast successfully.');
     }
 
     public function mine(): JsonResponse

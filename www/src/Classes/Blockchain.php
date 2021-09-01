@@ -39,13 +39,18 @@ class Blockchain
         return $this->chain[$index];
     }
 
-    public function createNewTransaction(float $amount, string $sender, string $recipient): int
+    public function createNewTransaction(float $amount, string $sender, string $recipient): array
     {
-        $newTransaction = [
+        return [
             'amount' => $amount,
             'sender' => $sender,
             'recipient' => $recipient,
+            'transactionId' => uniqid(),
         ];
+    }
+
+    public function addTransactionToPendingTransactions(array $newTransaction): int
+    {
         $this->pendingTransactions[] = $newTransaction;
 
         return $this->getLastBlock()['index'] + 1;
