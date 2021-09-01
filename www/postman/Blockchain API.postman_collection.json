@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "e98ab22a-dd98-479a-aa4f-1b77de4543bb",
+		"name": "Blockchain API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/transaction",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10,\n    \"sender\": \"sender-1\",\n    \"recipient\": \"recipient-1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/transaction",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/transaction/btoadcast",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10,\n    \"sender\": \"sender-1\",\n    \"recipient\": \"recipient-1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/transaction/broadcast",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"transaction",
+						"broadcast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/blockchain",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/blockchain",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"blockchain"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/consensus",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/consensus",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"consensus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/block/{blockHash}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/block/0000f6c037679ccfab3b53b8e028fae5f22f3f0c037c318cd5acf5b4b45942b3",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"block",
+						"0000f6c037679ccfab3b53b8e028fae5f22f3f0c037c318cd5acf5b4b45942b3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/transaction/{transactionId}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/transaction/0000f6c037679ccfab3b53b8e028fae5f22f3f0c037c318cd5acf5b4b45942b3",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"transaction",
+						"0000f6c037679ccfab3b53b8e028fae5f22f3f0c037c318cd5acf5b4b45942b3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/address/{address}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/address/recipient-1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"address",
+						"recipient-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/test",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mine",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mine",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/register-node",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newNodeUrl\": \"http://node3.net\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/register-node",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register-node"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/register-nodes-bulk",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"allNetworkNodes\": [\n        \"http://node1.net\",\n        \"http://node2.net\",\n        \"http://node3.net\",\n        \"http://node4.net\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/register-nodes-bulk",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register-nodes-bulk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/register-and-broadcast-node",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newNodeUrl\": \"http://node2.net\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/register-and-broadcast-node",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register-and-broadcast-node"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/receive-new-block",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"index\": 2,\n    \"timestamp\": 1627463422,\n    \"transactions\": [\n        {\n            \"amount\": 10,\n            \"sender\": \"sender-1\",\n            \"recipient\": \"recipient-1\",\n            \"transactionId\": \"61011d944bd78\"\n        }\n    ],\n    \"nonce\": 18502,\n    \"hash\": \"0000ba8f9a3dddf5c6482d6567146e35d92465633c66406fe2510dc628bce91e\",\n    \"previousBlockHash\": \"0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/receive-new-block",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"receive-new-block"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
