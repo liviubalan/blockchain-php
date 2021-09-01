@@ -24,4 +24,15 @@ class HttpClientService
 
         return $response->getContent();
     }
+
+    public function broadcast(array $networkNodes, string $path, array $params): array
+    {
+        $result = [];
+        foreach ($networkNodes as $networkNodeUrl) {
+            $url = $networkNodeUrl.$path;
+            $result[] = $this->makePost($url, $params);
+        }
+
+        return $result;
+    }
 }

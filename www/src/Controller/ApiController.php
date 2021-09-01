@@ -82,12 +82,11 @@ class ApiController extends AbstractController
 
         $newTransaction = $this->bitcoin->createNewTransaction($amount, $sender, $recipient);
         $this->bitcoin->addTransactionToPendingTransactions($newTransaction);
-
-        $networkNodes = $this->bitcoin->networkNodes;
-        foreach ($networkNodes as $networkNodeUrl) {
-            $url = $networkNodeUrl.'/transaction';
-            $this->httpClient->makePost($url, $newTransaction);
-        }
+        $this->httpClient->broadcast(
+            $this->bitcoin->networkNodes,
+            $this->get('router')->generate('transaction'),
+            $newTransaction
+        );
 
         return new JsonResponse('Transaction created and broadcast successfully.');
     }
@@ -167,15 +166,15 @@ class ApiController extends AbstractController
             $this->bitcoin->networkNodes[] = $newNodeUrl;
         }
 
-        $networkNodes = $this->bitcoin->networkNodes;
-        foreach ($networkNodes as $networkNodeUrl) {
-            $url = $networkNodeUrl.'/register-node';
-            $this->httpClient->makePost($url, [
+        $this->httpClient->broadcast(
+            $this->bitcoin->networkNodes,
+            $this->get('router')->generate('register_node'),
+            [
                 'newNodeUrl' => $newNodeUrl,
-            ]);
-        }
+            ]
+        );
 
-        $url = $newNodeUrl.'/register-nodes-bulk';
+        $url = $newNodeUrl.$this->get('router')->generate('register_nodes_bulk');
         $allNetworkNodes = array_merge($this->bitcoin->networkNodes, [$this->bitcoin->currentNodeUrl]);
         $this->httpClient->makePost($url, [
             'allNetworkNodes' => $allNetworkNodes,
