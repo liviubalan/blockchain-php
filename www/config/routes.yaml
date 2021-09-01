@@ -38,6 +38,11 @@ register_and_broadcast_node:
     controller: App\Controller\ApiController::registerAndBroadcastNode
     methods: [ POST ]
 
+consensus:
+    path: /consensus
+    controller: App\Controller\ApiController::consensus
+    methods: [ GET ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

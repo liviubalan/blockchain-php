@@ -231,6 +231,44 @@ class ApiController extends AbstractController
         ]);
     }
 
+    public function consensus(): JsonResponse
+    {
+        $maxChainLength = count($this->bitcoin->chain);
+        $newLongestChain = null;
+        $newPendingTransactions = null;
+
+        $this->httpClient->broadcast(
+            $this->bitcoin->networkNodes,
+            $this->get('router')->generate('blockchain'),
+            [],
+            Request::METHOD_GET,
+            function (string $blockchainString) use (&$maxChainLength, &$newLongestChain, &$newPendingTransactions) {
+                $blockchainArray = json_decode($blockchainString, true);
+                $blockchain = Blockchain::arrayToObject($blockchainArray);
+                if (count($blockchain->chain) > $maxChainLength) {
+                    $maxChainLength = count($blockchain->chain);
+                    $newLongestChain = $blockchain->chain;
+                    $newPendingTransactions = $blockchain->pendingTransactions;
+                }
+            }
+        );
+
+        if (!$newLongestChain || ($newLongestChain && !$this->bitcoin->chainIsValid($newLongestChain))) {
+            return new JsonResponse([
+                'note' => 'Current chain has not been replaced.',
+                'chain' => $this->bitcoin->chain,
+            ]);
+        } else {
+            $this->bitcoin->chain = $newLongestChain;
+            $this->bitcoin->pendingTransactions = $newPendingTransactions;
+
+            return new JsonResponse([
+                'note' => 'This chain has been replaced.',
+                'chain' => $this->bitcoin->chain,
+            ]);
+        }
+    }
+
     public function test(Request $request): JsonResponse
     {
         $server = $this->container->get('request_stack')->getCurrentRequest()->server;

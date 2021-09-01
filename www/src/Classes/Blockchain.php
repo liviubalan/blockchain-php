@@ -106,4 +106,14 @@ class Blockchain
 
         return $correctIndex && $correctTransactions && $correctNonce && $correctHash && $correctPreviousBlockHash;
     }
+
+    public static function arrayToObject(array $array): self
+    {
+        $object = new self('');
+        foreach ($array as $key => $value) {
+            $object->$key = $value;
+        }
+
+        return $object;
+    }
 }
