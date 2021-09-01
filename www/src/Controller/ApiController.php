@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Blockchain;
+use App\Service\HttpClientService;
 use App\Service\ValidatorService;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,11 +24,14 @@ class ApiController extends AbstractController
 
     private ValidatorService $validator;
 
+    private HttpClientService $httpClient;
+
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = parent::setContainer($container);
         $this->cache = $container->get('cache.app');
         $this->validator = $container->get(ValidatorService::class);
+        $this->httpClient = $container->get(HttpClientService::class);
 
         $cachedBitcoin = $this->cache->getItem(static::CACHE_KEY);
         if ($cachedBitcoin->isHit()) {
@@ -126,6 +130,38 @@ class ApiController extends AbstractController
 
         return new JsonResponse([
             'note' => 'Bulk registration successful.',
+        ]);
+    }
+
+    public function registerAndBroadcastNode(Request $request): JsonResponse
+    {
+        $this->validator->checkMandatoryFields($request, [
+            'newNodeUrl',
+        ]);
+
+        $content = json_decode($request->getContent(), true);
+        $newNodeUrl = $content['newNodeUrl'];
+
+        if (!in_array($newNodeUrl, $this->bitcoin->networkNodes)) {
+            $this->bitcoin->networkNodes[] = $newNodeUrl;
+        }
+
+        $networkNodes = $this->bitcoin->networkNodes;
+        foreach ($networkNodes as $networkNodeUrl) {
+            $url = $networkNodeUrl.'/register-node';
+            $this->httpClient->makePost($url, [
+                'newNodeUrl' => $newNodeUrl,
+            ]);
+        }
+
+        $url = $newNodeUrl.'/register-nodes-bulk';
+        $allNetworkNodes = array_merge($this->bitcoin->networkNodes, [$this->bitcoin->currentNodeUrl]);
+        $this->httpClient->makePost($url, [
+            'allNetworkNodes' => $allNetworkNodes,
+        ]);
+
+        return new JsonResponse([
+            'note' => 'New node registered with network successfully.',
         ]);
     }
 

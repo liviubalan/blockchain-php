@@ -33,7 +33,7 @@ sudo yum-config-manager --enable remi-php74
 sudo yum -y install php php-fpm
 
 # Install PHP extensions
-sudo yum -y install php-xml
+sudo yum -y install php-xml php-intl
 
 # Change user from "apache" to "nginx"
 btc_strf_replace_once 'user = apache' 'user = nginx' '/etc/php-fpm.d/www.conf'

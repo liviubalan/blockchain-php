@@ -33,3 +33,7 @@ services:
     App\Service\ValidatorService:
         class: App\Service\ValidatorService
         public: true
+
+    App\Service\HttpClientService:
+        class: App\Service\HttpClientService
+        public: true

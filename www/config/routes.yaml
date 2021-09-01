@@ -23,6 +23,11 @@ register_nodes_bulk:
     controller: App\Controller\ApiController::registerNodesBulk
     methods: [ POST ]
 
+register_and_broadcast_node:
+    path: /register-and-broadcast-node
+    controller: App\Controller\ApiController::registerAndBroadcastNode
+    methods: [ POST ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test
