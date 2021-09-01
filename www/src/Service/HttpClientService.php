@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class HttpClientService
@@ -13,9 +14,9 @@ class HttpClientService
         $this->client = $client;
     }
 
-    public function makePost(string $url, array $params): string
+    public function request(string $url, array $params, $method = Request::METHOD_POST): string
     {
-        $response = $this->client->request('POST', $url, [
+        $response = $this->client->request($method, $url, [
             'json' => $params,
         ]);
 
@@ -27,7 +28,7 @@ class HttpClientService
         $result = [];
         foreach ($networkNodes as $networkNodeUrl) {
             $url = $networkNodeUrl.$path;
-            $result[] = $this->makePost($url, $params);
+            $result[] = $this->request($url, $params);
         }
 
         return $result;
