@@ -13,6 +13,11 @@ transaction_broadcast:
     controller: App\Controller\ApiController::transactionBroadcast
     methods: [ POST ]
 
+receive_new_block:
+    path: /receive-new-block
+    controller: App\Controller\ApiController::receiveNewBlock
+    methods: [ POST ]
+
 mine:
     path: /mine
     controller: App\Controller\ApiController::mine

@@ -91,6 +91,38 @@ class ApiController extends AbstractController
         return new JsonResponse('Transaction created and broadcast successfully.');
     }
 
+    public function receiveNewBlock(Request $request): JsonResponse
+    {
+        $this->validator->checkMandatoryFields($request, [
+            'index',
+            'timestamp',
+            'transactions',
+            'nonce',
+            'hash',
+            'previousBlockHash',
+        ]);
+
+        $newBlock = json_decode($request->getContent(), true);
+        $lastBlock = $this->bitcoin->getLastBlock();
+        $correctHash = $lastBlock['hash'] === $newBlock['previousBlockHash'];
+        $correctIndex = $lastBlock['index'] + 1 === $newBlock['index'];
+
+        if ($correctHash && $correctIndex) {
+            $this->bitcoin->chain[] = $newBlock;
+            $this->bitcoin->pendingTransactions = [];
+
+            return new JsonResponse([
+                'note' => 'New block received and accepted.',
+                'newBlock' => $newBlock,
+            ]);
+        }
+
+        return new JsonResponse([
+            'note' => 'New block rejected.',
+            'newBlock' => $newBlock,
+        ]);
+    }
+
     public function mine(): JsonResponse
     {
         $lastBlock = $this->bitcoin->getLastBlock();
