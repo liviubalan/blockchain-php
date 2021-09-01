@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Blockchain;
+use App\Service\ValidatorService;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
@@ -20,10 +21,13 @@ class ApiController extends AbstractController
      */
     private $cache;
 
+    private ValidatorService $validator;
+
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $result = parent::setContainer($container);
         $this->cache = $container->get('cache.app');
+        $this->validator = $container->get(ValidatorService::class);
 
         $cachedBitcoin = $this->cache->getItem(static::CACHE_KEY);
         if ($cachedBitcoin->isHit()) {
@@ -47,20 +51,13 @@ class ApiController extends AbstractController
 
     public function transaction(Request $request): JsonResponse
     {
-        $content = trim($request->getContent());
-        if (!$content) {
-            throw $this->createNotFoundException('Empty request');
-        }
+        $this->validator->checkMandatoryFields($request, [
+            'amount',
+            'sender',
+            'recipient',
+        ]);
 
-        $content = json_decode($content, true);
-        if (
-            !array_key_exists('amount', $content)
-            || !array_key_exists('sender', $content)
-            || !array_key_exists('recipient', $content)
-        ) {
-            throw $this->createNotFoundException('The following fields are mandatory: amount, sender, recipient.');
-        }
-
+        $content = json_decode($request->getContent(), true);
         $amount = (float) $content['amount'];
         $sender = $content['sender'];
         $recipient = $content['recipient'];
@@ -94,16 +91,11 @@ class ApiController extends AbstractController
 
     public function registerNode(Request $request): JsonResponse
     {
-        $content = trim($request->getContent());
-        if (!$content) {
-            throw $this->createNotFoundException('Empty request');
-        }
+        $this->validator->checkMandatoryFields($request, [
+            'newNodeUrl',
+        ]);
 
-        $content = json_decode($content, true);
-        if (!array_key_exists('newNodeUrl', $content)) {
-            throw $this->createNotFoundException('The following fields are mandatory: newNodeUrl.');
-        }
-
+        $content = json_decode($request->getContent(), true);
         $newNodeUrl = $content['newNodeUrl'];
         $nodeAlreadyPresent = in_array($newNodeUrl, $this->bitcoin->networkNodes);
         $isCurrentNode = $this->bitcoin->currentNodeUrl === $newNodeUrl;
@@ -118,16 +110,11 @@ class ApiController extends AbstractController
 
     public function registerNodesBulk(Request $request): JsonResponse
     {
-        $content = trim($request->getContent());
-        if (!$content) {
-            throw $this->createNotFoundException('Empty request');
-        }
+        $this->validator->checkMandatoryFields($request, [
+            'allNetworkNodes',
+        ]);
 
-        $content = json_decode($content, true);
-        if (!array_key_exists('allNetworkNodes', $content)) {
-            throw $this->createNotFoundException('The following fields are mandatory: allNetworkNodes.');
-        }
-
+        $content = json_decode($request->getContent(), true);
         $allNetworkNodes = $content['allNetworkNodes'];
         foreach ($allNetworkNodes as $networkNodeUrl) {
             $nodeAlreadyPresent = in_array($networkNodeUrl, $this->bitcoin->networkNodes);
