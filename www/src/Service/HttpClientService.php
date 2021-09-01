@@ -23,12 +23,12 @@ class HttpClientService
         return $response->getContent();
     }
 
-    public function broadcast(array $networkNodes, string $path, array $params): array
+    public function broadcast(array $networkNodes, string $path, array $params, $method = Request::METHOD_POST): array
     {
         $result = [];
         foreach ($networkNodes as $networkNodeUrl) {
             $url = $networkNodeUrl.$path;
-            $result[] = $this->request($url, $params);
+            $result[] = $this->request($url, $params, $method);
         }
 
         return $result;

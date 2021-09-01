@@ -222,13 +222,9 @@ class ApiController extends AbstractController
 
         $url = $newNodeUrl.$this->get('router')->generate('register_nodes_bulk');
         $allNetworkNodes = array_merge($this->bitcoin->networkNodes, [$this->bitcoin->currentNodeUrl]);
-        $this->httpClient->request(
-            $url,
-            [
-                'allNetworkNodes' => $allNetworkNodes,
-            ],
-            Request::METHOD_POST
-        );
+        $this->httpClient->request($url, [
+            'allNetworkNodes' => $allNetworkNodes,
+        ]);
 
         return new JsonResponse([
             'note' => 'New node registered with network successfully.',
