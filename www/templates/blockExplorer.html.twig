@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <form>
+            <div class="mb-3">
+                <label for="searchInput" class="form-label">Search</label>
+                <input type="search" class="form-control" id="searchInput">
+            </div>
+            <div class="mb-3">
+                <label for="searchSelect" class="form-label">In</label>
+                <select class="form-select" id="searchSelect">
+                    <option value="/block/{blockHash}" selected>Block</option>
+                    <option value="/transaction/{transactionId}">Transaction</option>
+                    <option value="/address/{address}">Address</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+{% endblock %}
