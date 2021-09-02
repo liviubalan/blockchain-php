@@ -118,6 +118,22 @@ class Blockchain
         return null;
     }
 
+    public function getTransaction(string $transactionId): ?array
+    {
+        foreach ($this->chain as $block) {
+            foreach ($block['transactions'] as $transaction) {
+                if ($transaction['transactionId'] === $transactionId) {
+                    return [
+                        'transaction' => $transactionId,
+                        'block' => $block,
+                    ];
+                }
+            }
+        };
+
+        return null;
+    }
+
     public static function arrayToObject(array $array): self
     {
         $object = new self('');

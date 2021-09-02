@@ -58,7 +58,12 @@ class ApiController extends AbstractController
             'recipient',
         ]);
 
-        $newTransaction = json_decode($request->getContent(), true);
+        $content = json_decode($request->getContent(), true);
+        $amount = (float) $content['amount'];
+        $sender = $content['sender'];
+        $recipient = $content['recipient'];
+
+        $newTransaction = $this->bitcoin->createNewTransaction($amount, $sender, $recipient);
         $blockIndex = $this->bitcoin->addTransactionToPendingTransactions($newTransaction);
 
         return new JsonResponse([
@@ -274,6 +279,11 @@ class ApiController extends AbstractController
         return new JsonResponse([
             'block' => $this->bitcoin->getBlock($blockHash),
         ]);
+    }
+
+    public function infoTransaction(string $transactionId): JsonResponse
+    {
+        return new JsonResponse($this->bitcoin->getTransaction($transactionId));
     }
 
     public function test(Request $request): JsonResponse

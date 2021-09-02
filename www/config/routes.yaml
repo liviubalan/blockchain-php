@@ -48,6 +48,11 @@ info_block:
     controller: App\Controller\ApiController::infoBlock
     methods: [ GET ]
 
+info_transactions:
+    path: /transaction/{transactionId}
+    controller: App\Controller\ApiController::infoTransaction
+    methods: [ GET ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test
