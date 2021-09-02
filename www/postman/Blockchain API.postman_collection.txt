@@ -1,0 +1,77 @@
+{{url}}/transaction
+{
+    "amount": 10,
+    "sender": "sender-1",
+    "recipient": "recipient-1"
+}
+
+
+{{url}}/transaction/broadcast
+{
+    "amount": 10,
+    "sender": "sender-1",
+    "recipient": "recipient-1"
+}
+
+
+{{url}}/blockchain
+
+
+{{url}}/consensus
+
+
+{{url}}/block/0000f6c037679ccfab3b53b8e028fae5f22f3f0c037c318cd5acf5b4b45942b3
+
+
+{{url}}/transaction/61307e79a7060
+
+
+{{url}}/address/recipient-1
+
+
+{{url}}/test
+
+
+{{url}}/mine
+
+
+{{url}}/register-node
+{
+    "newNodeUrl": "http://node2.net"
+}
+
+
+{{url}}/register-nodes-bulk
+{
+    "allNetworkNodes": [
+        "http://node1.net",
+        "http://node2.net",
+        "http://node3.net",
+        "http://node4.net",
+        "http://node5.net"
+    ]
+}
+
+
+{{url}}/register-and-broadcast-node
+{
+    "newNodeUrl": "http://node2.net"
+}
+
+
+{{url}}/receive-new-block
+{
+    "index": 2,
+    "timestamp": 1627463422,
+    "transactions": [
+        {
+            "amount": 10,
+            "sender": "sender-1",
+            "recipient": "recipient-1",
+            "transactionId": "61011d944bd78"
+        }
+    ],
+    "nonce": 18502,
+    "hash": "0000ba8f9a3dddf5c6482d6567146e35d92465633c66406fe2510dc628bce91e",
+    "previousBlockHash": "0"
+}

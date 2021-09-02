@@ -61,6 +61,17 @@ BTC_COMMIT_HASH=(
     'a8e5e3d911b88cc210837d59be4909ee7b52e186'
     'c0a07a67873704713bc335907efcebcf38f84f9a'
     '72bf8058764c6eb9bc9b873a8b3b4de991820012'
+    'e2fa1979387e4ddd82fa04af2c1f7252c837462d'
+    '8cb0aa020f72f3f3070a0c4388a39823ad3eea86'
+    '620aacd375767adb0cbe6bc3080014117350cdae'
+    'f2d0e81ef6b2fe8d6672a9483bfd54107c5bcf67'
+    '78c7cd76349fc5b51facfe59130f21d9676b01c6'
+    'a5c4a39e9e1371446b3839b40e75e3ebaa798ae9'
+    '7baf9f9622796f890588f53630faa20653b9a1bd'
+    'ae39141c496dd284c58a38eb369ffc26788338f5'
+    '5d3c29ec3c427200b68607faf816a5ac4edec3e8'
+    '7d8081fbd4fefaae4630d7ca3519613bdce9c9e3'
+    '44ca4c78d2cfa0c521c754c1c405089faa49c8a2'
 )
 
 BTC_COMMIT_DESCRIPTION=(
@@ -124,4 +135,15 @@ BTC_COMMIT_DESCRIPTION=(
     'Refactor "HttpClientService::makePost" to "HttpClientService::request"'
     'Add "$method" param to "HttpClientService::broadcast"'
     'Build endpoint "/consensus"'
+    'Add "README.md" + Postman collection + follow.sh commit'
+    'Build endpoint "/block/{blockHash}"'
+    'Build endpoint "/transaction/{transactionId}"'
+    'Build endpoint "/address/{address}"'
+    'Split "routes.yaml" to "api.yaml" and "web.yaml"'
+    'Add "symfony/twig-bundle"'
+    'Build endpoint "/block-explorer"'
+    'Add bootstrap'
+    'Behavior for "block-explorer"'
+    'JS/CSS fine tunning'
+    'Fix dir creation on "follow.sh"'
 )
