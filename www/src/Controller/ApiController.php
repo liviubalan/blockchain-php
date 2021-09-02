@@ -276,14 +276,17 @@ class ApiController extends AbstractController
 
     public function infoBlock(string $blockHash): JsonResponse
     {
-        return new JsonResponse([
-            'block' => $this->bitcoin->getBlock($blockHash),
-        ]);
+        return new JsonResponse($this->bitcoin->getBlock($blockHash));
     }
 
     public function infoTransaction(string $transactionId): JsonResponse
     {
         return new JsonResponse($this->bitcoin->getTransaction($transactionId));
+    }
+
+    public function infoAddress(string $address): JsonResponse
+    {
+        return new JsonResponse($this->bitcoin->getAddress($address));
     }
 
     public function test(Request $request): JsonResponse

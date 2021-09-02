@@ -53,6 +53,11 @@ info_transactions:
     controller: App\Controller\ApiController::infoTransaction
     methods: [ GET ]
 
+info_address:
+    path: /address/{address}
+    controller: App\Controller\ApiController::infoAddress
+    methods: [ GET ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

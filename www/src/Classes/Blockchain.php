@@ -134,6 +134,34 @@ class Blockchain
         return null;
     }
 
+    public function getAddress(string $address): ?array
+    {
+        $addressTransactions = [];
+        foreach ($this->chain as $block) {
+            foreach ($block['transactions'] as $transaction) {
+                if ($transaction['sender'] === $address || $transaction['recipient'] === $address) {
+                    $addressTransactions[] = $transaction;
+                }
+            }
+        };
+
+        $balance = 0;
+        foreach ($addressTransactions as $transaction) {
+            if ($transaction['recipient'] === $address) {
+                $balance += $transaction['amount'];
+            } else {
+                if ($transaction['sender'] === $address) {
+                    $balance -= $transaction['amount'];
+                }
+            }
+        }
+
+        return [
+            'addressTransactions' => $addressTransactions,
+            'addressBalance' => $balance,
+        ];
+    }
+
     public static function arrayToObject(array $array): self
     {
         $object = new self('');
