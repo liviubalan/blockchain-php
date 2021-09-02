@@ -3,8 +3,8 @@
 {% block title %}Block Explorer{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <form>
+    <div class="container mt-3">
+        <form id="searchForm">
             <div class="mb-3">
                 <label for="searchInput" class="form-label">Search</label>
                 <input type="search" class="form-control" id="searchInput" value="">
@@ -17,8 +17,8 @@
                     <option value="address">Sender/Recipient Address</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-primary" id="searchButton">Search</button>
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
-        <div id="searchResult"></div>
+        <div class="pt-3" id="searchResult"></div>
     </div>
 {% endblock %}

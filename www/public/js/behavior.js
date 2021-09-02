@@ -32,7 +32,8 @@ function getTrTdTdTd(td1, td2, td3) {
 }
 
 $(document).ready(function () {
-    $("#searchButton").click(function () {
+    $("#searchForm").submit(function (event) {
+        event.preventDefault();
         const searchInput = $("#searchInput").val();
 
         if (searchInput === '') {
@@ -42,16 +43,20 @@ $(document).ready(function () {
 
         const searchSelect = $("#searchSelect").val();
         let url = '';
+        let h1 = '';
         switch (searchSelect) {
             case 'transaction':
                 url = '/transaction/{transactionId}';
                 url = url.replace('{transactionId}', searchInput);
+                h1 = 'Transaction';
                 break;
             case 'address':
                 url = '/address/{address}';
                 url = url.replace('{address}', searchInput);
+                h1 = 'Address';
                 break;
             default:
+                h1 = 'Block';
                 url = '/block/{blockHash}';
                 url = url.replace('{blockHash}', searchInput);
                 break;
@@ -66,7 +71,12 @@ $(document).ready(function () {
                 return;
             }
 
-            let searchResultHtml = `
+            let searchResultHtml = '';
+            searchResultHtml += '<h1 class="text-center">' + h1 + '</h1>';
+            if (searchSelect == 'address') {
+                searchResultHtml += '<p class="text-center">(Balance: ' + data.addressBalance + ')</p>';
+            }
+            searchResultHtml += `
             <table class="table table-striped table-bordered">
                 <tbody>
             `;
