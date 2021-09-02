@@ -94,6 +94,13 @@ do
             if [ -f "${BTC_COMMIT_FILE_PATH}" ]; then
                 echo "${BTC_COMMIT_FILE}"
 
+                BTC_DIR_PATH=$( dirname "${BTC_CONFIG_GIT}/${BTC_COMMIT_FILE}" )
+                # Check directory existence
+                if [ ! -d "${BTC_DIR_PATH}" ]; then
+                    # Create directory
+                    mkdir -p "${BTC_DIR_PATH}"
+                fi
+
                 # Copy file
                 cp "${BTC_COMMIT_FILE_PATH}" "${BTC_CONFIG_GIT}/${BTC_COMMIT_FILE}"
             else
