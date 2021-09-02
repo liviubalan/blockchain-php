@@ -124,7 +124,7 @@ class Blockchain
             foreach ($block['transactions'] as $transaction) {
                 if ($transaction['transactionId'] === $transactionId) {
                     return [
-                        'transaction' => $transactionId,
+                        'transaction' => $transaction,
                         'block' => $block,
                     ];
                 }
