@@ -107,6 +107,17 @@ class Blockchain
         return $correctIndex && $correctTransactions && $correctNonce && $correctHash && $correctPreviousBlockHash;
     }
 
+    public function getBlock(string $blockHash): ?array
+    {
+        foreach ($this->chain as $block) {
+            if ($block['hash'] === $blockHash) {
+                return $block;
+            }
+        };
+
+        return null;
+    }
+
     public static function arrayToObject(array $array): self
     {
         $object = new self('');

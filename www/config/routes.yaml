@@ -43,6 +43,11 @@ consensus:
     controller: App\Controller\ApiController::consensus
     methods: [ GET ]
 
+info_block:
+    path: /block/{blockHash}
+    controller: App\Controller\ApiController::infoBlock
+    methods: [ GET ]
+
 test:
     path: /test
     controller: App\Controller\ApiController::test

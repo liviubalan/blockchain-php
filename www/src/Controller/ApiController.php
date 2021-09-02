@@ -269,6 +269,13 @@ class ApiController extends AbstractController
         }
     }
 
+    public function infoBlock(string $blockHash): JsonResponse
+    {
+        return new JsonResponse([
+            'block' => $this->bitcoin->getBlock($blockHash),
+        ]);
+    }
+
     public function test(Request $request): JsonResponse
     {
         $server = $this->container->get('request_stack')->getCurrentRequest()->server;
