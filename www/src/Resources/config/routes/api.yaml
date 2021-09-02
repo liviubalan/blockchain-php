@@ -1,0 +1,64 @@
+blockchain:
+    path: /blockchain
+    controller: App\Controller\ApiController::blockchain
+    methods: [ GET ]
+
+transaction:
+    path: /transaction
+    controller: App\Controller\ApiController::transaction
+    methods: [ POST ]
+
+transaction_broadcast:
+    path: /transaction/broadcast
+    controller: App\Controller\ApiController::transactionBroadcast
+    methods: [ POST ]
+
+receive_new_block:
+    path: /receive-new-block
+    controller: App\Controller\ApiController::receiveNewBlock
+    methods: [ POST ]
+
+mine:
+    path: /mine
+    controller: App\Controller\ApiController::mine
+    methods: [ GET ]
+
+register_node:
+    path: /register-node
+    controller: App\Controller\ApiController::registerNode
+    methods: [ POST ]
+
+register_nodes_bulk:
+    path: /register-nodes-bulk
+    controller: App\Controller\ApiController::registerNodesBulk
+    methods: [ POST ]
+
+register_and_broadcast_node:
+    path: /register-and-broadcast-node
+    controller: App\Controller\ApiController::registerAndBroadcastNode
+    methods: [ POST ]
+
+consensus:
+    path: /consensus
+    controller: App\Controller\ApiController::consensus
+    methods: [ GET ]
+
+info_block:
+    path: /block/{blockHash}
+    controller: App\Controller\ApiController::infoBlock
+    methods: [ GET ]
+
+info_transactions:
+    path: /transaction/{transactionId}
+    controller: App\Controller\ApiController::infoTransaction
+    methods: [ GET ]
+
+info_address:
+    path: /address/{address}
+    controller: App\Controller\ApiController::infoAddress
+    methods: [ GET ]
+
+test:
+    path: /test
+    controller: App\Controller\ApiController::test
+    methods: [ GET ]
