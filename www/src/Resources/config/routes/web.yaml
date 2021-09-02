@@ -1,0 +1,4 @@
+block_explorer:
+    path: /block-explorer
+    controller: App\Controller\WebController::blockExplorer
+    methods: [ GET ]
