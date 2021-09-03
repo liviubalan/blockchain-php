@@ -172,6 +172,13 @@ class ApiController extends AbstractController
 
         $content = json_decode($request->getContent(), true);
         $newNodeUrl = $content['newNodeUrl'];
+
+        if (!$this->isReliableNode($newNodeUrl)) {
+            return new JsonResponse([
+                'note' => "Node $newNodeUrl is not reliable.",
+            ]);
+        }
+
         $nodeAlreadyPresent = in_array($newNodeUrl, $this->bitcoin->networkNodes);
         $isCurrentNode = $this->bitcoin->currentNodeUrl === $newNodeUrl;
         if (!$nodeAlreadyPresent && !$isCurrentNode) {
@@ -191,6 +198,15 @@ class ApiController extends AbstractController
 
         $content = json_decode($request->getContent(), true);
         $allNetworkNodes = $content['allNetworkNodes'];
+
+        foreach ($allNetworkNodes as $networkNodeUrl) {
+            if (!$this->isReliableNode($networkNodeUrl)) {
+                return new JsonResponse([
+                    'note' => "Node $networkNodeUrl is not reliable.",
+                ]);
+            }
+        }
+
         foreach ($allNetworkNodes as $networkNodeUrl) {
             $nodeAlreadyPresent = in_array($networkNodeUrl, $this->bitcoin->networkNodes);
             $currentNode = $this->bitcoin->currentNodeUrl === $networkNodeUrl;
@@ -213,7 +229,15 @@ class ApiController extends AbstractController
         $content = json_decode($request->getContent(), true);
         $newNodeUrl = $content['newNodeUrl'];
 
-        if (!in_array($newNodeUrl, $this->bitcoin->networkNodes)) {
+        if (!$this->isReliableNode($newNodeUrl)) {
+            return new JsonResponse([
+                'note' => "Node $newNodeUrl is not reliable.",
+            ]);
+        }
+
+        $nodeAlreadyPresent = in_array($newNodeUrl, $this->bitcoin->networkNodes);
+        $isCurrentNode = $this->bitcoin->currentNodeUrl === $newNodeUrl;
+        if (!$nodeAlreadyPresent && !$isCurrentNode) {
             $this->bitcoin->networkNodes[] = $newNodeUrl;
         }
 
@@ -373,5 +397,19 @@ EOD;
         $serializedBitcoin = serialize($this->bitcoin);
         $cachedBitcoin->set($serializedBitcoin);
         $this->cache->save($cachedBitcoin);
+    }
+
+    private function isReliableNode(string $nodeUrl): bool
+    {
+        $trimmedUrl = trim($nodeUrl, '/');
+
+        if ($nodeUrl != $trimmedUrl) {
+            return false;
+        }
+
+        $trimmedUrl .= $this->get('router')->generate('blockchain');
+        $headers = @get_headers($trimmedUrl);
+
+        return $headers && $headers[0] == 'HTTP/1.1 200 OK' && $headers[2] == 'Content-Type: application/json';
     }
 }
