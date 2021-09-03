@@ -152,6 +152,13 @@ can use `vagrant provision`:
     git clone git@github.com:liviubalan/blockchain-php.git blockchain.emag-2
     ```
 
+   **Note:** If you're having problems cloning the project using SSH try using HTTPS:
+
+    ```bash
+    git clone https://github.com/liviubalan/blockchain-php.git blockchain.emag
+    git clone https://github.com/liviubalan/blockchain-php.git blockchain.emag-2
+    ```
+
 4. Setup environment by running `open-stack.sh`. For this follow the steps after running:
 
     ```bash
@@ -221,3 +228,12 @@ can use `vagrant provision`:
 * https://www.php.net/manual/en/function.var-dump.php
 * https://en.wikipedia.org/wiki/Proof_of_work
 * https://en.bitcoin.it/wiki/Genesis_block
+* https://symfony.com/doc/4.4/components/cache.html
+* https://www.cnbc.com/2021/06/24/mining-bitcoin-could-get-easier-after-china-crypto-crackdown.html
+* https://www.investopedia.com/bitcoin-halving-4843769
+* https://symfony.com/doc/4.4/http_client.html
+* https://www.hindawi.com/journals/scn/2021/9918697/
+* https://101blockchains.com/consensus-algorithms-blockchain/
+* https://www.blockchain.com/explorer
+* https://etherscan.io/
+* https://stackoverflow.com/questions/2280394/how-can-i-check-if-a-url-exists-via-php
