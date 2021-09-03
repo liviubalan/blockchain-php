@@ -34,11 +34,7 @@ class ApiController extends AbstractController
         if ($cachedBitcoin->isHit()) {
             $bitcoin = unserialize($cachedBitcoin->get());
         } else {
-            $server = $this->container->get('request_stack')->getCurrentRequest()->server;
-            $scheme = $server->get('REQUEST_SCHEME', '');
-            $host = $server->get('HTTP_HOST', '');
-            $currentNodeUrl = $scheme.'://'.$host;
-            $bitcoin = new Blockchain($currentNodeUrl);
+            $bitcoin = new Blockchain($this->getCurrentNodeUrl());
         }
         $this->bitcoin = $bitcoin;
 
@@ -313,13 +309,9 @@ class ApiController extends AbstractController
         return new JsonResponse($this->bitcoin->getAddress($address));
     }
 
-    public function test(Request $request): JsonResponse
+    public function test(): JsonResponse
     {
-        $server = $this->container->get('request_stack')->getCurrentRequest()->server;
-        $scheme = $server->get('REQUEST_SCHEME', '');
-        $host = $server->get('HTTP_HOST', '');
-        $currentNodeUrl = $scheme.'://'.$host;
-        $bitcoin = new Blockchain($currentNodeUrl);
+        $bitcoin = new Blockchain($this->getCurrentNodeUrl());
 
         $blockchain = <<<EOD
 [
@@ -397,6 +389,22 @@ EOD;
         $serializedBitcoin = serialize($this->bitcoin);
         $cachedBitcoin->set($serializedBitcoin);
         $this->cache->save($cachedBitcoin);
+    }
+
+    private function getCurrentNodeUrl(): string
+    {
+        $server = $this->container->get('request_stack')->getCurrentRequest()->server;
+
+        $scheme = 'http';
+        if ($server->has('HTTP_X_FORWARDED_PROTO')) {
+            $scheme = $server->get('HTTP_X_FORWARDED_PROTO');
+        } elseif ($server->has('REQUEST_SCHEME')) {
+            $scheme = $server->get('REQUEST_SCHEME');
+        }
+
+        $host = $server->get('HTTP_HOST', '');
+
+        return $scheme.'://'.$host;
     }
 
     private function isReliableNode(string $nodeUrl): bool
