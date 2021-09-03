@@ -418,6 +418,6 @@ EOD;
         $trimmedUrl .= $this->get('router')->generate('blockchain');
         $headers = @get_headers($trimmedUrl);
 
-        return $headers && $headers[0] == 'HTTP/1.1 200 OK' && $headers[2] == 'Content-Type: application/json';
+        return $headers && $headers[0] == 'HTTP/1.1 200 OK' && ($headers[2] == 'Content-Type: application/json' || $headers[3] == 'Content-Type: application/json');
     }
 }
